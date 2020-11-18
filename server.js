@@ -19,6 +19,13 @@ app.get('/register', (req, res) =>{
     res.render('register');
 })
 
+app.get('/secrets', (req, res) => {
+    res.render('secrets');
+});
+
+app.get('/logout', (req, res) => {
+    res.render('home');
+})
 app.listen(3000, () => {
     console.log("connected on port 3000");
 })
