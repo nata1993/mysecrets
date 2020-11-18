@@ -1,0 +1,24 @@
+<%- include('partials/header') %>
+
+<div class="container mt-5">
+    <h1>Register</h1>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="card card-body">
+                <form action="/register" method="POST">
+                    <div class="form-group">
+                        <input type="email" name="form-control" name="username">
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="form-control" name="password">
+                        <label for="password">Password</label>
+                        <button type="submit" class="btn-dark">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
