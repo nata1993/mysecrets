@@ -1,9 +1,11 @@
 /*"C:\Program Files\MongoDB\Server\4.2\bin\mongod.exe" --dbpath="c:\users\opilane\data\db"*/
 
+require('dotenv').config();
 const express = require("express");
+const md5 = require("md5");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const encrypt = require('mongoose-encryption');
+//const encrypt = require('mongoose-encryption');
 //const ejs = require("ejs");
 const app = express();
 
@@ -11,7 +13,7 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 
-mongoose.connect('mongodb://localhost:27017/secretDB',
+mongoose.connect(process.env.DB_HOST,
 {useNewUrlParser: true, useUnifiedTopology: true});
 
 const userSchema = new mongoose.Schema({
@@ -19,8 +21,7 @@ const userSchema = new mongoose.Schema({
     password: String
 });
 
-const secret = "thisismysecret";
-//userSchema.plugin(encrypt, {secret: secret, encryptedFields: ['password']});
+//userSchema.plugin(encrypt, {secret: process.env.SECRET, encryptedFields: ['password']});    //SECRET on võetud .env failist
 const User = new mongoose.model('User', userSchema);
 
 app.get('/', (req, res) => {
@@ -34,7 +35,7 @@ app.get('/register', (req, res) => {
 app.post('/register', (req, res) =>{
     const newUser = new User({
         email: req.body.username,
-        password: req.body.password
+        password: md5(req.body.password)
     });
 
     newUser.save((error) => {
@@ -53,7 +54,7 @@ app.get('/login', (req, res) => {
 
 app.post('/login', (req, res) => {
     const userName = req.body.username;
-    const password = req.body.password;
+    const password = md5(req.body.password);
 
     User.findOne({
         email: userName,
